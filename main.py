@@ -19,8 +19,6 @@ remove = 0
 
 
 # initialize game state
-# board = generate_sudoku(size, remove)  # create board
-
 
 def draw_big_grid():  # large grid
     # draws vertical lines
