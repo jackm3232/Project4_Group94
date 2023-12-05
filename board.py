@@ -38,7 +38,7 @@ class Board:
     It will be displayed at the top left corner of the cell using the draw() function.
     '''
     def sketch(self, value):
-        pass
+       pass
 
     '''
     Sets the value of the current selected cell equal to user entered value.
