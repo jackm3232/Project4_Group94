@@ -1,5 +1,4 @@
 import pygame, sys
-
 from Project4_Group94.sudoku_generator import generate_sudoku
 # from sudoku_generator import *
 from constants import *
