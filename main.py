@@ -19,25 +19,36 @@ remove = 0
 
 def draw_big_grid():  # large grid
     # draws vertical lines
-    for i in range(1, 3):
+    for i in range(3):
         pygame.draw.line(screen, BLACK, (BIG_SQUARE * i, START), (BIG_SQUARE * i, END),
                          BIG_LINE_WIDTH)
     # draws horizontal lines
-    for i in range(1, 4):
+    for i in range(4):
         pygame.draw.line(screen, BLACK, (START, BIG_SQUARE * i), (END, BIG_SQUARE * i),
                          BIG_LINE_WIDTH)
 
 
 def draw_small_grid():  # inner, smaller grid
     # draws horizontal lines
-    for i in range(1, 9):
+    for i in range(9):
         pygame.draw.line(screen, BLACK, (SMALL_SQUARE * i, START), (SMALL_SQUARE * i, END),
                          SMALL_LINE_WIDTH)
     # draws vertical lines
-    for i in range(1, 9):
+    for i in range(9):
         pygame.draw.line(screen, BLACK, (START, SMALL_SQUARE * i), (END, SMALL_SQUARE * i),
                          SMALL_LINE_WIDTH)
-
+def highlight_cell(row, col):
+    pygame.draw.line(screen, RED, (SMALL_SQUARE*col, SMALL_SQUARE*row), (SMALL_SQUARE*col, SMALL_SQUARE*row + SMALL_SQUARE),
+                     SMALL_LINE_WIDTH)
+    pygame.draw.line(screen, RED, (SMALL_SQUARE * col, SMALL_SQUARE * row),
+                     (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row),
+                     SMALL_LINE_WIDTH)
+    pygame.draw.line(screen, RED, (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row),
+                     (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row + SMALL_SQUARE),
+                     SMALL_LINE_WIDTH)
+    pygame.draw.line(screen, RED, (SMALL_SQUARE * col, SMALL_SQUARE * row + SMALL_SQUARE),
+                     (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row + SMALL_SQUARE),
+                     SMALL_LINE_WIDTH)
 def draw_numbers():
     num_one_surf = num_font.render("1", 0, BLACK)
     num_one_rect = num_one_surf.get_rect(center = (340,340))
@@ -70,6 +81,7 @@ while True:
             x, y = event.pos
             row = y // SMALL_SQUARE
             col = x // SMALL_SQUARE
+            highlight_cell(row, col)
         if game_over:
             pygame.display.update()
             pygame.time.delay(100)
