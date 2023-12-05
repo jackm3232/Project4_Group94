@@ -129,7 +129,13 @@ def generate_sudoku(size, removed):
     sudoku = SudokuGenerator(size, removed)
     sudoku.fill_values()
     solved_board = sudoku.get_board()
+    solved = []
+    for s in solved_board:
+        new_s = []
+        for num in s:
+            new_s.append(num)
+        solved.append(new_s)
     sudoku.remove_cells()
     board = sudoku.get_board()
-    out = [board, solved_board]
+    out = [board, solved]
     return out
