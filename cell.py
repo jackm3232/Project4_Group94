@@ -9,13 +9,13 @@ class Cell:
     Setter for this cell’s value
     '''
     def set_cell_value(self, value):
-        pass
+        self.value =  value
 
     '''
     Setter for this cell’s sketched value
     '''
     def set_sketched_value(self, value):
-        pass
+        self.value = value
 
     '''
     Draws this cell, along with the value inside it.
