@@ -7,7 +7,8 @@ from constants import *
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Sudoku')
-screen.fill(BG)
+image = pygame.image.load('sudoku_image.png').convert()
+screen.blit(image, (0, 0))
 pygame.display.update()
 num_font = pygame.font.Font(None, NUM_FONT)
 welcome_font = pygame.font.Font(None, WELCOME_FONT)
@@ -147,6 +148,7 @@ def start_menu():
         x, y = event.pos
         if 148 < x < 188:
             diff = 30
+            screen.fill(BG)
             draw_big_grid()
             draw_small_grid()
             pygame.display.update()
@@ -155,6 +157,7 @@ def start_menu():
             buttons()
         if 317 < x < 357:
             diff = 40
+            screen.fill(BG)
             draw_big_grid()
             draw_small_grid()
             pygame.display.update()
@@ -163,6 +166,7 @@ def start_menu():
             buttons()
         if 480 < x < 520:
             diff = 50
+            screen.fill(BG)
             draw_big_grid()
             draw_small_grid()
             pygame.display.update()
