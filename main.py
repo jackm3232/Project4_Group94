@@ -141,6 +141,8 @@ def start_menu():
     hard_surface.blit(hard_text, (10, 10))
     hard_rectangle = hard_surface.get_rect(center=(WIDTH // 1.35, 490))
     screen.blit(hard_surface, hard_rectangle)
+
+    # Board is displayed based on difficulty selected
     if event.type == pygame.MOUSEBUTTONDOWN:
         x, y = event.pos
         if 148 < x < 188:
