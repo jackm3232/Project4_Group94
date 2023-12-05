@@ -10,6 +10,7 @@ pygame.display.set_caption('Sudoku')
 screen.fill(BG)
 pygame.display.update()
 num_font = pygame.font.Font(None, NUM_FONT)
+welcome_font = pygame.font.Font(None, WELCOME_FONT)
 game_over_font = pygame.font.Font(None, OVER_FONT)
 button_font = pygame.font.Font(None, BUTTON_FONT)
 
@@ -110,6 +111,10 @@ def draw_og_board(b):
                 screen.blit(num_text, ((i * SMALL_SQUARE) + offset + 5, (j * SMALL_SQUARE) + offset - 5))
 
 def start_menu():
+    # Displays Welcome Message
+    welcome_surf = welcome_font.render("Welcome to Sudoku", 0, BLACK)
+    welcome_rect = welcome_surf.get_rect(center=(WIDTH // 2, HEIGHT // 5))
+    screen.blit(welcome_surf, welcome_rect)
     # Display Easy Button
     easy_text = button_font.render("EASY", 0, WHITE)
     easy_surface = pygame.Surface((easy_text.get_size()[0] + 20, easy_text.get_size()[1] + 20))
@@ -138,11 +143,11 @@ def start_menu():
 # initialize board with all empty cells
 diff = 30
 board = generate_sudoku(9, diff)
-#draw_big_grid()
-#draw_small_grid()
-#draw_og_board(board)
-#buttons()
-#pygame.display.update()
+draw_big_grid()
+draw_small_grid()
+draw_og_board(board)
+buttons()
+pygame.display.update()
 while True:
     game_over = False
     for event in pygame.event.get():  # event loop
