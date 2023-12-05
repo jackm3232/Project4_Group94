@@ -109,18 +109,44 @@ def draw_og_board(b):
                 num_text = num_font.render(str(num), 0, BLACK)
                 screen.blit(num_text, ((i * SMALL_SQUARE) + offset + 5, (j * SMALL_SQUARE) + offset - 5))
 
+def start_menu():
+    # Display Easy Button
+    easy_text = button_font.render("EASY", 0, WHITE)
+    easy_surface = pygame.Surface((easy_text.get_size()[0] + 20, easy_text.get_size()[1] + 20))
+    easy_surface.fill(ORANGE)
+    easy_surface.blit(easy_text, (10, 10))
+    easy_rectangle = easy_surface.get_rect(center=(WIDTH // 4, 490))
+    screen.blit(easy_surface, easy_rectangle)
+    # Display Medium Button
+    med_text = button_font.render("MEDIUM", 0, WHITE)
+    med_surface = pygame.Surface((med_text.get_size()[0] + 20, med_text.get_size()[1] + 20))
+    med_surface.fill(ORANGE)
+    med_surface.blit(med_text, (10, 10))
+    med_rectangle = med_surface.get_rect(center=(WIDTH // 2, 490))
+    screen.blit(med_surface, med_rectangle)
+    # Display Hard Button
+    hard_text = button_font.render("HARD", 0, WHITE)
+    hard_surface = pygame.Surface((hard_text.get_size()[0] + 20, hard_text.get_size()[1] + 20))
+    hard_surface.fill(ORANGE)
+    hard_surface.blit(hard_text, (10, 10))
+    hard_rectangle = hard_surface.get_rect(center=(WIDTH // 1.35, 490))
+    screen.blit(hard_surface, hard_rectangle)
+
+
+
 
 # initialize board with all empty cells
 diff = 30
 board = generate_sudoku(9, diff)
-draw_big_grid()
-draw_small_grid()
-draw_og_board(board)
-buttons()
-pygame.display.update()
+#draw_big_grid()
+#draw_small_grid()
+#draw_og_board(board)
+#buttons()
+#pygame.display.update()
 while True:
     game_over = False
     for event in pygame.event.get():  # event loop
+        start_menu()
         draw_big_grid()
         draw_small_grid()
         pygame.display.update()
