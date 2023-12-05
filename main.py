@@ -115,6 +115,10 @@ def start_menu():
     welcome_surf = welcome_font.render("Welcome to Sudoku", 0, BLACK)
     welcome_rect = welcome_surf.get_rect(center=(WIDTH // 2, HEIGHT // 5))
     screen.blit(welcome_surf, welcome_rect)
+    # Displays Game Mode Message
+    game_mode_surf = num_font.render("Select Game Mode:", 0, BLACK)
+    game_mode_rect = game_mode_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2.5))
+    screen.blit(game_mode_surf, game_mode_rect)
     # Display Easy Button
     easy_text = button_font.render("EASY", 0, WHITE)
     easy_surface = pygame.Surface((easy_text.get_size()[0] + 20, easy_text.get_size()[1] + 20))
