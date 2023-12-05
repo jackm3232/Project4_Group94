@@ -43,17 +43,17 @@ def draw_small_grid():  # inner, smaller grid
                          SMALL_LINE_WIDTH)
 
 
-def highlight_cell(row, col):
-    pygame.draw.line(screen, RED, (SMALL_SQUARE * col, SMALL_SQUARE * row),
+def highlight_cell(row, col, color):
+    pygame.draw.line(screen, color, (SMALL_SQUARE * col, SMALL_SQUARE * row),
                      (SMALL_SQUARE * col, SMALL_SQUARE * row + SMALL_SQUARE),
                      SMALL_LINE_WIDTH)
-    pygame.draw.line(screen, RED, (SMALL_SQUARE * col, SMALL_SQUARE * row),
+    pygame.draw.line(screen, color, (SMALL_SQUARE * col, SMALL_SQUARE * row),
                      (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row),
                      SMALL_LINE_WIDTH)
-    pygame.draw.line(screen, RED, (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row),
+    pygame.draw.line(screen, color, (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row),
                      (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row + SMALL_SQUARE),
                      SMALL_LINE_WIDTH)
-    pygame.draw.line(screen, RED, (SMALL_SQUARE * col, SMALL_SQUARE * row + SMALL_SQUARE),
+    pygame.draw.line(screen, color, (SMALL_SQUARE * col, SMALL_SQUARE * row + SMALL_SQUARE),
                      (SMALL_SQUARE * col + SMALL_SQUARE, SMALL_SQUARE * row + SMALL_SQUARE),
                      SMALL_LINE_WIDTH)
 
@@ -91,10 +91,10 @@ def buttons():
 
 def draw_game_over(win):
     screen.fill(BG)
-    if win == 0:
-        end_text = "Game Over :("
-    else:
+    if win == 1:
         end_text = "Game Won!"
+    else:
+        end_text = "Game Over :("
     end_surf = game_over_font.render(end_text, 0, BLACK)
     end_rect = end_surf.get_rect(center=(WIDTH // 2, HEIGHT // 3))
     screen.blit(end_surf, end_rect)
@@ -107,40 +107,59 @@ def draw_og_board(b):
             num = b[i][j]
             if num != 0:
                 num_text = num_font.render(str(num), 0, BLACK)
-                screen.blit(num_text, ((i * SMALL_SQUARE) + offset + 5, (j * SMALL_SQUARE) + offset - 5))
+                screen.blit(num_text, ((j * SMALL_SQUARE) + offset + 5, (i * SMALL_SQUARE) + offset - 5))
 
 
 # initialize board with all empty cells
 diff = 30
 board = generate_sudoku(9, diff)
+solved = board[1]
+board = board[0]
 draw_big_grid()
 draw_small_grid()
 draw_og_board(board)
 buttons()
 pygame.display.update()
+r = 0
+c = 0
 while True:
     game_over = False
     for event in pygame.event.get():  # event loop
-        draw_big_grid()
-        draw_small_grid()
         pygame.display.update()
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN and not game_over:
             x, y = event.pos
+            if (y // SMALL_SQUARE) != r or (x // SMALL_SQUARE) != c:
+                draw_big_grid()
+                draw_small_grid()
             r = y // SMALL_SQUARE
             c = x // SMALL_SQUARE
             if y <= 675:
-                highlight_cell(r, c)
+                highlight_cell(r, c, RED)
+                num_text = num_font.render("2", 0, BLACK)
+                screen.blit(num_text, ((c * SMALL_SQUARE) + 20 + 5, (r * SMALL_SQUARE) + 20 - 5))
             else:
                 if 739 >= y >= 691:
                     if 112 <= x <= 224:
-                        print('reset')  # reset board
+                        screen.fill(BG)
+                        draw_big_grid()
+                        draw_small_grid()
+                        draw_og_board(board)
+                        buttons()
                     elif 263 <= x <= 411:
                         print('restart')  # return to home screen
                     if 460 <= x <= 548:
-                        print('exit')  # end program
+                        pygame.quit()
+                        sys.exit()
+                        # end program
+        if 0 in board:
+            game_over = True
+            if board == solved:
+                win = 1
+            else:
+                win = 0
         if game_over:
             pygame.display.update()
             pygame.time.delay(100)
