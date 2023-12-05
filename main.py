@@ -110,6 +110,7 @@ def draw_og_board(b):
                 num_text = num_font.render(str(num), 0, BLACK)
                 screen.blit(num_text, ((i * SMALL_SQUARE) + offset + 5, (j * SMALL_SQUARE) + offset - 5))
 
+
 def start_menu():
     # Displays Welcome Message
     welcome_surf = welcome_font.render("Welcome to Sudoku", 0, BLACK)
@@ -140,25 +141,46 @@ def start_menu():
     hard_surface.blit(hard_text, (10, 10))
     hard_rectangle = hard_surface.get_rect(center=(WIDTH // 1.35, 490))
     screen.blit(hard_surface, hard_rectangle)
-
-
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        x, y = event.pos
+        if 148 < x < 188:
+            diff = 30
+            draw_big_grid()
+            draw_small_grid()
+            pygame.display.update()
+            board = generate_sudoku(9, diff)
+            draw_og_board(board)
+            buttons()
+        if 317 < x < 357:
+            diff = 40
+            draw_big_grid()
+            draw_small_grid()
+            pygame.display.update()
+            board = generate_sudoku(9, diff)
+            draw_og_board(board)
+            buttons()
+        if 480 < x < 520:
+            diff = 50
+            draw_big_grid()
+            draw_small_grid()
+            pygame.display.update()
+            board = generate_sudoku(9, diff)
+            draw_og_board(board)
+            buttons()
 
 
 # initialize board with all empty cells
-diff = 30
-board = generate_sudoku(9, diff)
-draw_big_grid()
-draw_small_grid()
-draw_og_board(board)
-buttons()
-pygame.display.update()
+#diff = 30
+#board = generate_sudoku(9, diff)
+#draw_big_grid()
+#draw_small_grid()
+#draw_og_board(board)
+# buttons()
+#pygame.display.update()
 while True:
     game_over = False
     for event in pygame.event.get():  # event loop
         start_menu()
-        draw_big_grid()
-        draw_small_grid()
-        pygame.display.update()
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
