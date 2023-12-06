@@ -13,13 +13,65 @@ sketch_font = pygame.font.Font(None, SKETCH_FONT)
 num_font = pygame.font.Font(None, NUM_FONT)
 game_over_font = pygame.font.Font(None, OVER_FONT)
 button_font = pygame.font.Font(None, BUTTON_FONT)
+welcome_font = pygame.font.Font(None, WELCOME_FONT)
+diff = 1
 
-size = 0
-remove = 0
 
+def start_menu():
+    # Displays Welcome Message
+    welcome_surf = welcome_font.render("Welcome to Sudoku", 0, BLACK)
+    welcome_rect = welcome_surf.get_rect(center=(WIDTH // 2, HEIGHT // 5))
+    screen.blit(welcome_surf, welcome_rect)
+    # Displays Game Mode Message
+    game_mode_surf = num_font.render("Select Game Mode:", 0, BLACK)
+    game_mode_rect = game_mode_surf.get_rect(center=(WIDTH // 2, HEIGHT // 2.5))
+    screen.blit(game_mode_surf, game_mode_rect)
+    # Display Easy Button
+    easy_text = button_font.render("EASY", 0, WHITE)
+    easy_surface = pygame.Surface((easy_text.get_size()[0] + 20, easy_text.get_size()[1] + 20))
+    easy_surface.fill(ORANGE)
+    easy_surface.blit(easy_text, (10, 10))
+    easy_rectangle = easy_surface.get_rect(center=(WIDTH // 4, 490))
+    screen.blit(easy_surface, easy_rectangle)
+    # Display Medium Button
+    med_text = button_font.render("MEDIUM", 0, WHITE)
+    med_surface = pygame.Surface((med_text.get_size()[0] + 20, med_text.get_size()[1] + 20))
+    med_surface.fill(ORANGE)
+    med_surface.blit(med_text, (10, 10))
+    med_rectangle = med_surface.get_rect(center=(WIDTH // 2, 490))
+    screen.blit(med_surface, med_rectangle)
+    # Display Hard Button
+    hard_text = button_font.render("HARD", 0, WHITE)
+    hard_surface = pygame.Surface((hard_text.get_size()[0] + 20, hard_text.get_size()[1] + 20))
+    hard_surface.fill(ORANGE)
+    hard_surface.blit(hard_text, (10, 10))
+    hard_rectangle = hard_surface.get_rect(center=(WIDTH // 1.35, 490))
+    screen.blit(hard_surface, hard_rectangle)
 
-# initialize game state
-# board = generate_sudoku(size, remove)  # create board
+    for event in pygame.event.get():
+        pygame.display.update()
+        # Board is displayed based on difficulty selected
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+            diff = 1
+            if 463 < y < 517:
+                if 148 < x < 188:
+                    diff = 30
+                elif 317 < x < 357:
+                    diff = 40
+                elif 480 < x < 520:
+                    diff = 50
+            if diff != 1:
+                board_call = generate_sudoku(9, diff)
+                board = board_call[0]
+                screen.fill(BG)
+                draw_big_grid()
+                draw_small_grid()
+                draw_og_board(board)
+                buttons()
+                pygame.display.update()
+                if board_call is not None:
+                    return board_call
 
 
 def draw_big_grid():  # large grid
@@ -105,9 +157,8 @@ def draw_game_over(win):
         exit_surface.fill(ORANGE)
         exit_surface.blit(exit_text, (10, 10))
         exit_rectangle = exit_surface.get_rect(
-            center=(WIDTH // 2, HEIGHT//2))
+            center=(WIDTH // 2, HEIGHT // 2))
         screen.blit(exit_surface, exit_rectangle)
-
 
 
 def draw_og_board(b):
@@ -129,9 +180,12 @@ def draw_changed_board(b, sketch):
                 screen.blit(num_text, ((j * SMALL_SQUARE) + 5, (i * SMALL_SQUARE) + 5))
 
 
-# initialize board with all empty cells
-diff = 1
-board_call = generate_sudoku(9, diff)
+image = pygame.image.load('sudoku_image.png').convert()
+screen.blit(image, (0, 0))
+board_call = start_menu()
+while board_call is None:
+    board_call = start_menu()
+pygame.display.update()
 solved = board_call[1]
 board = board_call[0]
 og_board = []
@@ -140,16 +194,13 @@ for i in range(len(board)):
     for j in range(len(board[i])):
         og.append(board[i][j])
     og_board.append(og)
-draw_big_grid()
-draw_small_grid()
-draw_og_board(board)
-buttons()
-pygame.display.update()
 guess = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+                         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
 r, c, win = 0, 0, 0
-while True:
+
+# initialize board with all empty cells
+while True and board is not None:
     game_over = False
     for event in pygame.event.get():  # event loop
         pygame.display.update()
@@ -176,7 +227,7 @@ while True:
                         draw_og_board(board)
                         buttons()
                     elif 263 <= x <= 411:
-                        print('restart')  # return to home screen
+                        diff = start_menu()
                     elif 460 <= x <= 548:
                         pygame.quit()
                         sys.exit()
