@@ -45,22 +45,25 @@ def start_menu():
     hard_surface = pygame.Surface((hard_text.get_size()[0] + 20, hard_text.get_size()[1] + 20))
     hard_surface.fill(ORANGE)
     hard_surface.blit(hard_text, (10, 10))
-    hard_rectangle = hard_surface.get_rect(center=(WIDTH // 1.35, 490))
+    hard_rectangle = hard_surface.get_rect(center = (WIDTH - 175, 490))
     screen.blit(hard_surface, hard_rectangle)
 
     for event in pygame.event.get():
         pygame.display.update()
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
         # Board is displayed based on difficulty selected
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             diff = 1
             if 463 < y < 517:
                 if 148 < x < 188:
-                    diff = 30
+                    diff = 2
                 elif 317 < x < 357:
-                    diff = 40
+                    diff = 2
                 elif 480 < x < 520:
-                    diff = 50
+                    diff = 2
             if diff != 1:
                 board_call = generate_sudoku(9, diff)
                 board = board_call[0]
@@ -143,7 +146,8 @@ def buttons():
 
 
 def draw_game_over(win):
-    screen.fill(BG)
+    image = pygame.image.load('sudoku_image.png').convert()
+    screen.blit(image, (0, 0))
     if win == 1:
         end_text = "Game Won!"
     else:
@@ -159,6 +163,44 @@ def draw_game_over(win):
         exit_rectangle = exit_surface.get_rect(
             center=(WIDTH // 2, HEIGHT // 2))
         screen.blit(exit_surface, exit_rectangle)
+        while True:
+            for event in pygame.event.get():
+                pygame.display.update()
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                # Board is displayed based on difficulty selected
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if 304 <= x <= 370 and 345 <= y <= 405:
+                            pygame.quit()
+                            sys.exit()
+    else:
+        exit_text = button_font.render("RESTART", 0, WHITE)
+        exit_surface = pygame.Surface((exit_text.get_size()[0] + 20, exit_text.get_size()[1] + 20))
+        exit_surface.fill(ORANGE)
+        exit_surface.blit(exit_text, (10, 10))
+        exit_rectangle = exit_surface.get_rect(
+            center=(WIDTH // 2, HEIGHT // 2))
+        screen.blit(exit_surface, exit_rectangle)
+        while True:
+            for event in pygame.event.get():
+                pygame.display.update()
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                # Board is displayed based on difficulty selected
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if 274 <= x <= 400 and 345 <= y <= 405:
+                        image = pygame.image.load('sudoku_image.png').convert()
+                        screen.blit(image, (0, 0))
+                        board_call = start_menu()
+                        while board_call is None:
+                            board_call = start_menu()
+                        pygame.display.update()
+                        return board_call
+
 
 
 def draw_og_board(b):
@@ -227,7 +269,24 @@ while True and board is not None:
                         draw_og_board(board)
                         buttons()
                     elif 263 <= x <= 411:
-                        diff = start_menu()
+                        image = pygame.image.load('sudoku_image.png').convert()
+                        screen.blit(image, (0, 0))
+                        board_call = start_menu()
+                        while board_call is None:
+                            board_call = start_menu()
+                        pygame.display.update()
+                        solved = board_call[1]
+                        board = board_call[0]
+                        og_board = []
+                        for i in range(len(board)):
+                            og = []
+                            for j in range(len(board[i])):
+                                og.append(board[i][j])
+                            og_board.append(og)
+                        guess = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                 [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                 [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+                        r, c, win = 0, 0, 0
                     elif 460 <= x <= 548:
                         pygame.quit()
                         sys.exit()
@@ -327,5 +386,20 @@ while True and board is not None:
         if game_over:
             pygame.display.update()
             pygame.time.delay(100)
-            draw_game_over(win)
+            board_call = draw_game_over(win)
+            solved = board_call[1]
+            board = board_call[0]
+            og_board = []
+            for i in range(len(board)):
+                og = []
+                for j in range(len(board[i])):
+                    og.append(board[i][j])
+                og_board.append(og)
+            guess = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                     [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+            r, c, win = 0, 0, 0
     pygame.display.update()
